@@ -21,12 +21,9 @@ module.exports = () => {
             }
         }, [
             PaperView({
-                value: {
-                    recordMap: {},
-                    records: []
-                },
+                value: paperData.data,
                 onchange: (v) => {
-                    //
+                    // save changes to background
                 }
             })
         ]);

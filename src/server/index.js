@@ -22,7 +22,10 @@ module.exports = ({
             return (req, res) => {
                 res.end(JSON.stringify({
                     errno: 0,
-                    data: 'ok!'
+                    data: {
+                        recordMap: {},
+                        records: []
+                    }
                 }));
             };
         } else if (pathname === savePaperApiPath) {
