@@ -21,8 +21,13 @@ module.exports = () => {
             }
         }, [
             PaperView({
-                recordMap: {},
-                records: []
+                value: {
+                    recordMap: {},
+                    records: []
+                },
+                onchange: (v) => {
+                    //
+                }
             })
         ]);
     });

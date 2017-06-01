@@ -25,7 +25,7 @@
     "crude-server": "0.0.1",
     "es6-promisify": "^5.0.0",
     "kabanery": "^0.2.4",
-    "kabanery-flow": "0.0.3",
+    "kabanery-flow": "0.0.4",
     "kabanery-spa": "0.0.16",
     "mime-types": "^2.1.15",
     "uuid": "^3.0.1",

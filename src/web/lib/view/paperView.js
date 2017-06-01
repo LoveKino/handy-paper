@@ -1,11 +1,11 @@
 'use strict';
 
 let {
-    view, n
+    view
 } = require('kabanery');
 
 let {
-    RawInput, m
+    m
 } = require('kabanery-flow');
 
 let uuidV4 = require('uuid/v4');
@@ -14,19 +14,25 @@ let {
     map
 } = require('bolzano');
 
+let RecordView = require('./recordView');
+
 /**
  *
  * data = {
- *   recordMap: {},
- *   records: [id]
+ *   value: {recordMap: {}, records: [id]}
  * }
  */
 module.exports = view(({
-    recordMap,
-    records
+    value,
+    onchange
 }, {
     update
 }) => {
+    let {
+        recordMap,
+        records
+    } = value;
+
     let addRecord = (x, y) => {
         let startId = uuidV4();
 
@@ -38,13 +44,15 @@ module.exports = view(({
         };
     };
 
-    return () => n('div', {
+    return () => m('div', {
         style: {
             width: '100%',
             height: '100%',
             // backgroundColor: 'rgba(234, 212, 74, 1)',
             position: 'relative'
         },
+        value,
+        onchange,
 
         onclick: (e) => {
             let x = e.clientX;
@@ -54,27 +62,11 @@ module.exports = view(({
 
             update();
         }
-    }, [
+    }, (bindValue) => [
         map(records, (id) => {
-            let record = recordMap[id];
-
-            return m('div', {
-                value: record
-            }, (bindValue) => [
-                RawInput(bindValue('value', {
-                    style: {
-                        position: 'fixed',
-                        left: record.left,
-                        top: record.top
-                    },
-
-                    id,
-
-                    onclick: (e) => {
-                        e.stopPropagation();
-                    }
-                }))
-            ]);
+            return RecordView(bindValue(`recordMap.${id}`, {
+                id
+            }));
         })
     ]);
 });
