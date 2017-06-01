@@ -1,0 +1,38 @@
+{
+  "name": "handy-paper",
+  "version": "0.0.1",
+  "description": "Handy paper to use",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha \"test/function/**/*.js\" -t 10000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LoveKino/handy-paper.git"
+  },
+  "keywords": [
+    "handy",
+    "paper"
+  ],
+  "author": "ddchen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LoveKino/handy-paper/issues"
+  },
+  "homepage": "https://github.com/LoveKino/handy-paper#readme",
+  "dependencies": {
+    "bolzano": "^0.1.1",
+    "crude-server": "0.0.1",
+    "es6-promisify": "^5.0.0",
+    "kabanery": "^0.2.4",
+    "kabanery-flow": "0.0.3",
+    "kabanery-spa": "0.0.16",
+    "mime-types": "^2.1.15",
+    "uuid": "^3.0.1",
+    "whatwg-fetch": "^2.0.3",
+    "yargs": "^8.0.1"
+  },
+  "devDependencies": {
+    "webpack": "^2.6.1"
+  }
+}
