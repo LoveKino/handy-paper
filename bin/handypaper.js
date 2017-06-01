@@ -7,9 +7,11 @@ let {
 } = require('..');
 
 let yargs = require('yargs');
+let path = require('path');
 
 yargs.usage(`Usage: $0
     -p [port, default is 8000]
+    -s [storage dir]
     `).demandOption([]).help('h').alias('h', 'help');
 
 let {
@@ -17,5 +19,6 @@ let {
 } = yargs;
 
 handypaper({
-    port: argv.port
+    port: argv.p,
+    storageDir: path.join(process.cwd(), argv.s || '')
 });

@@ -48,7 +48,7 @@ module.exports = view(({
         style: {
             width: '100%',
             height: '100%',
-            // backgroundColor: 'rgba(234, 212, 74, 1)',
+            backgroundColor: 'rgba(234, 212, 174, 1)',
             position: 'relative'
         },
         value,

@@ -16,14 +16,16 @@ let log = console.log; // eslint-disable-line
 const publicDir = path.join(__dirname, './web');
 
 let handypaper = ({
-    port = 8000
+    port = 8000,
+    storageDir
 } = {}) => {
     let {
         start
     } = Server({
         savePaperApiPath,
         getPaperApiPath,
-        publicDir
+        publicDir,
+        storageDir
     });
 
     return start(port).then(({

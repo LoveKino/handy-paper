@@ -1,7 +1,7 @@
 'use strict';
 
-const savePaperApiPath = '/savePaper';
-const getPaperApiPath = '/savePaper';
+const savePaperApiPath = '/api/savePaper';
+const getPaperApiPath = '/api/getPaper';
 
 module.exports = {
     savePaperApiPath,

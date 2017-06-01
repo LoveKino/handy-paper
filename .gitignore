@@ -60,3 +60,5 @@ typings/
 *.swp
 *.swn
 *.DS_Store
+
+test/fxiture/**/*

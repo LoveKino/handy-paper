@@ -17,14 +17,18 @@ module.exports = view(({
         onchange,
 
         style: {
-            position: 'fixed',
+            position: 'absolute',
             left: value.left,
             top: value.top
         }
     }, (bindValue) => [
         RawTextArea(bindValue('value', {
-            id,
+            style: {
+                backgroundColor: 'rgba(255, 255, 255, 0)',
+                fontSize: 20
+            },
 
+            id,
             onclick: (e) => {
                 e.stopPropagation();
             }

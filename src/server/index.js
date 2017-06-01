@@ -6,12 +6,16 @@ let mime = require('mime-types');
 let {
     createReadStream
 } = require('fs');
+let PaperStore = require('./store/paper');
 
 module.exports = ({
     savePaperApiPath,
     getPaperApiPath,
-    publicDir
+    publicDir,
+    storageDir
 }) => {
+    let paperPath = path.join(storageDir, 'index.json');
+
     return crude((pathname) => {
         if (pathname === '/') {
             return (req, res) => {
@@ -20,13 +24,17 @@ module.exports = ({
             };
         } else if (pathname === getPaperApiPath) {
             return (req, res) => {
-                res.end(JSON.stringify({
-                    errno: 0,
-                    data: {
-                        recordMap: {},
-                        records: []
-                    }
-                }));
+                PaperStore.get(paperPath).then((data) => {
+                    res.end(JSON.stringify({
+                        errno: 0,
+                        data
+                    }));
+                }).catch(err => {
+                    res.end(JSON.stringify({
+                        errno: 'paperStore.get',
+                        errorMsg: err.toString()
+                    }));
+                });
             };
         } else if (pathname === savePaperApiPath) {
             return (req, res) => {
@@ -36,12 +44,16 @@ module.exports = ({
                 });
 
                 req.on('end', () => {
-                    let data = JSON.parse(str);
-
-                    // TODO save data
-                    res.end(JSON.stringify({
-                        errno: 0
-                    }));
+                    PaperStore.save(paperPath, str).then(() => {
+                        res.end(JSON.stringify({
+                            errno: 0
+                        }));
+                    }).catch(err => {
+                        res.end(JSON.stringify({
+                            errno: 'paperStore.save',
+                            errorMsg: err.toString()
+                        }));
+                    });
                 });
             };
         } else if (/^\/public/.test(pathname)) {
