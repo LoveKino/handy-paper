@@ -17,9 +17,9 @@ let existsFile = (filePath) => {
     });
 };
 
-let save = (filePath, str) => {
+let save = (filePath, paper) => {
     // TODO check data format
-    return writeFile(filePath, str, 'utf-8');
+    return writeFile(filePath, JSON.stringify(paper), 'utf-8');
 };
 
 let get = (filePath) => {
@@ -31,7 +31,9 @@ let get = (filePath) => {
             }), 'utf-8');
         }
     }).then(() => {
-        return readFile(filePath, 'utf-8');
+        return readFile(filePath, 'utf-8').then((str) => {
+            return JSON.parse(str);
+        });
     });
 };
 

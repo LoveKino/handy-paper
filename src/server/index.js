@@ -4,61 +4,55 @@ let path = require('path');
 let crude = require('crude-server');
 let mime = require('mime-types');
 let {
+    midder
+} = require('general-bridge/apply/http');
+let {
     createReadStream
 } = require('fs');
 let PaperStore = require('./store/paper');
 
+let getPaperPath = (storageDir) => {
+    let paperPath = path.join(storageDir, 'files/index.json');
+    return paperPath;
+};
+
 module.exports = ({
-    savePaperApiPath,
-    getPaperApiPath,
     publicDir,
     storageDir
 }) => {
-    let paperPath = path.join(storageDir, 'index.json');
-
     return crude((pathname) => {
         if (pathname === '/') {
             return (req, res) => {
                 res.setHeader('Content-Type', 'html');
                 createReadStream(path.join(publicDir, 'index.html')).pipe(res);
             };
-        } else if (pathname === getPaperApiPath) {
+        } else if (pathname === '/api') {
             return (req, res) => {
-                PaperStore.get(paperPath).then((data) => {
-                    res.end(JSON.stringify({
-                        errno: 0,
-                        data
-                    }));
-                }).catch(err => {
-                    res.end(JSON.stringify({
-                        errno: 'paperStore.get',
-                        errorMsg: err.toString()
-                    }));
+                let paperPath = getPaperPath(storageDir);
+
+                let mid = midder({
+                    getPaper: () => {
+                        return PaperStore.get(paperPath);
+                    },
+
+                    savePaper: (paper) => {
+                        return PaperStore.save(paperPath, paper);
+                    }
                 });
-            };
-        } else if (pathname === savePaperApiPath) {
-            return (req, res) => {
-                let str = '';
+
+                let chunks = [];
                 req.on('data', (chunk) => {
-                    str += chunk.toString();
+                    chunks.push(chunk);
                 });
 
                 req.on('end', () => {
-                    PaperStore.save(paperPath, str).then(() => {
-                        res.end(JSON.stringify({
-                            errno: 0
-                        }));
-                    }).catch(err => {
-                        res.end(JSON.stringify({
-                            errno: 'paperStore.save',
-                            errorMsg: err.toString()
-                        }));
-                    });
+                    mid(chunks.join(''), res);
                 });
             };
-        } else if (/^\/public/.test(pathname)) {
-            return (req, res) => { // just pipe static file
+        } else if (/^\/public/.test(pathname)) { // just pipe static file
+            return (req, res) => {
                 res.setHeader('Content-Type', mime.lookup(pathname));
+                // TODO cache headers
                 createReadStream(path.join(publicDir, pathname.substring(1))).pipe(res);
             };
         }

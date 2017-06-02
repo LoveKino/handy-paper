@@ -8,10 +8,6 @@ let {
     m
 } = require('kabanery-flow');
 
-let {
-    getPaperApiPath, savePaperApiPath
-} = require('../../../config');
-
 let PaperView = require('../view/paperView');
 
 let OpSpace = require('../view/opSpace');
@@ -48,23 +44,17 @@ let PaperPage = view(({
     ]);
 });
 
-module.exports = () => {
-    return fetch(getPaperApiPath).then((response) => {
-        return response.json();
-    }).then((paperData) => {
+module.exports = ({
+    call
+}) => {
+    return call('getPaper').then((paperData) => {
         return PaperPage({
             value: {
-                paperData: JSON.parse(paperData.data)
+                paperData
             },
 
             savePaper: (v) => {
-                fetch(savePaperApiPath, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(v)
-                });
+                call('savePaper', [v]);
             }
         });
     });

@@ -3,9 +3,6 @@
 let Server = require('./server');
 let path = require('path');
 let openPage = require('./util/openPage');
-let {
-    savePaperApiPath, getPaperApiPath
-} = require('./config');
 
 let log = console.log; // eslint-disable-line
 
@@ -22,8 +19,6 @@ let handypaper = ({
     let {
         start
     } = Server({
-        savePaperApiPath,
-        getPaperApiPath,
         publicDir,
         storageDir
     });

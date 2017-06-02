@@ -8,6 +8,10 @@ let {
 
 let paper = require('./page/paper');
 
+let ajaxCaller = require('general-bridge/apply/http/ajax');
+
+let call = ajaxCaller('/api');
+
 let {
     forward
 } = router(queryPager({
@@ -15,6 +19,8 @@ let {
         render: paper,
         title: 'paper'
     }
-}, 'paper'));
+}, 'paper'), {
+    call
+});
 
 forward(window.location.href);

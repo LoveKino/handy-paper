@@ -24,6 +24,7 @@
     "bolzano": "^0.1.1",
     "crude-server": "0.0.1",
     "es6-promisify": "^5.0.0",
+    "general-bridge": "^0.3.3",
     "kabanery": "^0.2.4",
     "kabanery-flow": "0.0.5",
     "kabanery-spa": "0.0.16",
