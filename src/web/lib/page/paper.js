@@ -12,6 +12,10 @@ let PaperView = require('../view/paperView');
 
 let OpSpace = require('../view/opSpace');
 
+let {
+    clearEmpty
+} = require('../model/paper');
+
 /**
  * value = {
  *  paperData
@@ -19,6 +23,8 @@ let OpSpace = require('../view/opSpace');
  */
 let PaperPage = view(({
     value, onchange, savePaper
+}, {
+    update
 }) => {
     return m('div', {
         style: {
@@ -38,7 +44,11 @@ let PaperPage = view(({
             }
         }, [
             OpSpace({
-                save: () => savePaper(value.paperData)
+                save: () => {
+                    return savePaper(value.paperData).then(() => {
+                        update();
+                    });
+                }
             })
         ])
     ]);
@@ -54,7 +64,8 @@ module.exports = ({
             },
 
             savePaper: (v) => {
-                call('savePaper', [v]);
+                clearEmpty(v);
+                return call('savePaper', [v]);
             }
         });
     });

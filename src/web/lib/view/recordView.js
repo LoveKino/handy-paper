@@ -1,34 +1,55 @@
 'use strict';
 
 let {
-    view
+    view, n
 } = require('kabanery');
 let {
-    m, RawTextArea
+    m
 } = require('kabanery-flow');
+
+let RawText = require('./text/rawText');
 
 module.exports = view(({
     value,
     onchange,
+    ondelete,
     id
 }) => {
     return m('div', {
+        onclick: (e) => {
+            e.stopPropagation();
+        },
         value,
         onchange,
 
         style: {
             position: 'absolute',
             left: value.left,
-            top: value.top
+            top: value.top,
+            width: '40%'
         }
     }, (bindValue) => [
-        RawTextArea(bindValue('value', {
+        n('div', {
+        }, [
+            n('div', {
+                style: {
+                    cursor: 'pointer',
+                    position: 'relative'
+                },
+
+                onclick: (e) => {
+                    e.stopPropagation();
+                    ondelete && ondelete(id);
+                }
+            }, 'x')
+        ]),
+
+        RawText(bindValue('value', {
             style: {
                 backgroundColor: 'rgba(255, 255, 255, 0)',
                 fontSize: 20
             },
 
-            id,
             onclick: (e) => {
                 e.stopPropagation();
             }

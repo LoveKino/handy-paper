@@ -8,14 +8,15 @@ let {
     m
 } = require('kabanery-flow');
 
-let uuidV4 = require('uuid/v4');
-
 let {
     map
 } = require('bolzano');
 
 let RecordView = require('./recordView');
 
+let {
+    addRecord, removeRecord
+} = require('../model/paper');
 /**
  *
  * data = {
@@ -28,27 +29,11 @@ module.exports = view(({
 }, {
     update
 }) => {
-    let {
-        recordMap,
-        records
-    } = value;
-
-    let addRecord = (x, y) => {
-        let startId = uuidV4();
-
-        records.push(startId);
-        recordMap[startId] = {
-            left: x,
-            top: y,
-            value: ''
-        };
-    };
-
     return () => m('div', {
         style: {
             width: '100%',
             height: '100%',
-            backgroundColor: 'rgba(234, 212, 174, 1)',
+            //backgroundColor: 'rgba(234, 212, 174, 1)',
             position: 'relative'
         },
         value,
@@ -58,14 +43,18 @@ module.exports = view(({
             let x = e.clientX;
             let y = e.clientY;
 
-            addRecord(x, y);
+            addRecord(value, x, y);
 
             update();
         }
     }, (bindValue) => [
-        map(records, (id) => {
+        map(value.records, (id) => {
             return RecordView(bindValue(`recordMap.${id}`, {
-                id
+                id,
+                ondelete: (id) => {
+                    removeRecord(value, id);
+                    update();
+                }
             }));
         })
     ]);
