@@ -7793,7 +7793,7 @@ let {
 let RecordView = __webpack_require__(91);
 
 let {
-    addRecord
+    addRecord, removeRecord
 } = __webpack_require__(92);
 /**
  *
@@ -7811,7 +7811,7 @@ module.exports = view(({
         style: {
             width: '100%',
             height: '100%',
-            //            backgroundColor: 'rgba(234, 212, 174, 1)',
+            //backgroundColor: 'rgba(234, 212, 174, 1)',
             position: 'relative'
         },
         value,
@@ -7828,7 +7828,11 @@ module.exports = view(({
     }, (bindValue) => [
         map(value.records, (id) => {
             return RecordView(bindValue(`recordMap.${id}`, {
-                id
+                id,
+                ondelete: (id) => {
+                    removeRecord(value, id);
+                    update();
+                }
             }));
         })
     ]);
@@ -7843,7 +7847,7 @@ module.exports = view(({
 
 
 let {
-    view
+    view, n
 } = __webpack_require__(2);
 let {
     m, RawTextArea
@@ -7852,6 +7856,7 @@ let {
 module.exports = view(({
     value,
     onchange,
+    ondelete,
     id
 }) => {
     return m('div', {
@@ -7864,6 +7869,17 @@ module.exports = view(({
             top: value.top
         }
     }, (bindValue) => [
+        n('div', {
+            style: {
+                cursor: 'pointer'
+            },
+
+            onclick: (e) => {
+                e.stopPropagation();
+                ondelete && ondelete(id);
+            }
+        }, 'x'),
+
         RawTextArea(bindValue('value', {
             style: {
                 backgroundColor: 'rgba(255, 255, 255, 0)',

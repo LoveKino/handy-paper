@@ -15,7 +15,7 @@ let {
 let RecordView = require('./recordView');
 
 let {
-    addRecord
+    addRecord, removeRecord
 } = require('../model/paper');
 /**
  *
@@ -33,7 +33,7 @@ module.exports = view(({
         style: {
             width: '100%',
             height: '100%',
-            //            backgroundColor: 'rgba(234, 212, 174, 1)',
+            //backgroundColor: 'rgba(234, 212, 174, 1)',
             position: 'relative'
         },
         value,
@@ -50,7 +50,11 @@ module.exports = view(({
     }, (bindValue) => [
         map(value.records, (id) => {
             return RecordView(bindValue(`recordMap.${id}`, {
-                id
+                id,
+                ondelete: (id) => {
+                    removeRecord(value, id);
+                    update();
+                }
             }));
         })
     ]);
