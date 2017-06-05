@@ -4,8 +4,10 @@ let {
     view, n
 } = require('kabanery');
 let {
-    m, RawTextArea
+    m
 } = require('kabanery-flow');
+
+let RawText = require('./text/rawText');
 
 module.exports = view(({
     value,
@@ -14,6 +16,9 @@ module.exports = view(({
     id
 }) => {
     return m('div', {
+        onclick: (e) => {
+            e.stopPropagation();
+        },
         value,
         onchange,
 
@@ -34,13 +39,12 @@ module.exports = view(({
             }
         }, 'x'),
 
-        RawTextArea(bindValue('value', {
+        RawText(bindValue('value', {
             style: {
                 backgroundColor: 'rgba(255, 255, 255, 0)',
                 fontSize: 20
             },
 
-            id,
             onclick: (e) => {
                 e.stopPropagation();
             }

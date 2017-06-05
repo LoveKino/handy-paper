@@ -7850,8 +7850,10 @@ let {
     view, n
 } = __webpack_require__(2);
 let {
-    m, RawTextArea
+    m
 } = __webpack_require__(6);
+
+let RawText = __webpack_require__(93);
 
 module.exports = view(({
     value,
@@ -7860,6 +7862,9 @@ module.exports = view(({
     id
 }) => {
     return m('div', {
+        onclick: (e) => {
+            e.stopPropagation();
+        },
         value,
         onchange,
 
@@ -7880,13 +7885,12 @@ module.exports = view(({
             }
         }, 'x'),
 
-        RawTextArea(bindValue('value', {
+        RawText(bindValue('value', {
             style: {
                 backgroundColor: 'rgba(255, 255, 255, 0)',
                 fontSize: 20
             },
 
-            id,
             onclick: (e) => {
                 e.stopPropagation();
             }
@@ -7946,6 +7950,54 @@ module.exports = {
     clearEmpty,
     removeRecord
 };
+
+
+/***/ }),
+/* 93 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+let {
+    RawTextArea
+} = __webpack_require__(6);
+
+let {
+    view
+} = __webpack_require__(2);
+
+module.exports = view(({
+    value, onchange, height = 'auto'
+}, {
+    getNode
+}) => {
+    let resize = () => {
+        let node = getNode();
+        node.style.height = 'auto';
+        node.style.height = node.scrollHeight + 'px';
+    };
+
+    // TODO on mount event
+    setTimeout(() => {
+        resize();
+    }, 17);
+
+    return RawTextArea({
+        onchange: (v) => {
+            onchange && onchange(v);
+            resize();
+        },
+
+        value,
+
+        style: {
+            backgroundColor: 'rgba(255, 255, 255, 0)',
+            fontSize: 20,
+            height
+        }
+    });
+});
 
 
 /***/ })
