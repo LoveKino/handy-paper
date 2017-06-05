@@ -3275,6 +3275,10 @@ let PaperView = __webpack_require__(90);
 
 let OpSpace = __webpack_require__(89);
 
+let {
+    clearEmpty
+} = __webpack_require__(92);
+
 /**
  * value = {
  *  paperData
@@ -3282,6 +3286,8 @@ let OpSpace = __webpack_require__(89);
  */
 let PaperPage = view(({
     value, onchange, savePaper
+}, {
+    update
 }) => {
     return m('div', {
         style: {
@@ -3301,7 +3307,11 @@ let PaperPage = view(({
             }
         }, [
             OpSpace({
-                save: () => savePaper(value.paperData)
+                save: () => {
+                    return savePaper(value.paperData).then(() => {
+                        update();
+                    });
+                }
             })
         ])
     ]);
@@ -3317,7 +3327,8 @@ module.exports = ({
             },
 
             savePaper: (v) => {
-                call('savePaper', [v]);
+                clearEmpty(v);
+                return call('savePaper', [v]);
             }
         });
     });
@@ -7775,14 +7786,15 @@ let {
     m
 } = __webpack_require__(6);
 
-let uuidV4 = __webpack_require__(10);
-
 let {
     map
 } = __webpack_require__(5);
 
 let RecordView = __webpack_require__(91);
 
+let {
+    addRecord
+} = __webpack_require__(92);
 /**
  *
  * data = {
@@ -7795,27 +7807,11 @@ module.exports = view(({
 }, {
     update
 }) => {
-    let {
-        recordMap,
-        records
-    } = value;
-
-    let addRecord = (x, y) => {
-        let startId = uuidV4();
-
-        records.push(startId);
-        recordMap[startId] = {
-            left: x,
-            top: y,
-            value: ''
-        };
-    };
-
     return () => m('div', {
         style: {
             width: '100%',
             height: '100%',
-            backgroundColor: 'rgba(234, 212, 174, 1)',
+            //            backgroundColor: 'rgba(234, 212, 174, 1)',
             position: 'relative'
         },
         value,
@@ -7825,12 +7821,12 @@ module.exports = view(({
             let x = e.clientX;
             let y = e.clientY;
 
-            addRecord(x, y);
+            addRecord(value, x, y);
 
             update();
         }
     }, (bindValue) => [
-        map(records, (id) => {
+        map(value.records, (id) => {
             return RecordView(bindValue(`recordMap.${id}`, {
                 id
             }));
@@ -7881,6 +7877,59 @@ module.exports = view(({
         }))
     ]);
 });
+
+
+/***/ }),
+/* 92 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+let uuidV4 = __webpack_require__(10);
+
+let {
+    map, reduce
+} = __webpack_require__(5);
+
+let addRecord = (value, x, y) => {
+    // clear empty
+    clearEmpty(value);
+
+    let startId = uuidV4();
+    value.records.push(startId);
+    value.recordMap[startId] = {
+        left: x,
+        top: y,
+        value: ''
+    };
+};
+
+let clearEmpty = (value) => {
+    map(value.records, (id) => {
+        let record = value.recordMap[id];
+        if (!record.value || !record.value.trim()) {
+            removeRecord(value, id);
+        }
+    });
+};
+
+let removeRecord = (value, id) => {
+    value.records = reduce(value.records, (prev, recordId) => {
+        if (id !== recordId) {
+            prev.push(recordId);
+        }
+        return prev;
+    }, []);
+
+    delete value.recordMap[id];
+};
+
+module.exports = {
+    addRecord,
+    clearEmpty,
+    removeRecord
+};
 
 
 /***/ })
