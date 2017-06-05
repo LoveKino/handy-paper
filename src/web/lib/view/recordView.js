@@ -25,20 +25,24 @@ module.exports = view(({
         style: {
             position: 'absolute',
             left: value.left,
-            top: value.top
+            top: value.top,
+            width: '40%'
         }
     }, (bindValue) => [
         n('div', {
-            style: {
-                cursor: 'pointer',
-                position: 'relative'
-            },
+        }, [
+            n('div', {
+                style: {
+                    cursor: 'pointer',
+                    position: 'relative'
+                },
 
-            onclick: (e) => {
-                e.stopPropagation();
-                ondelete && ondelete(id);
-            }
-        }, 'x'),
+                onclick: (e) => {
+                    e.stopPropagation();
+                    ondelete && ondelete(id);
+                }
+            }, 'x')
+        ]),
 
         RawText(bindValue('value', {
             style: {
