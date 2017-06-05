@@ -7876,7 +7876,8 @@ module.exports = view(({
     }, (bindValue) => [
         n('div', {
             style: {
-                cursor: 'pointer'
+                cursor: 'pointer',
+                position: 'relative'
             },
 
             onclick: (e) => {
@@ -7992,7 +7993,7 @@ module.exports = view(({
         value,
 
         style: {
-            backgroundColor: 'rgba(255, 255, 255, 0)',
+            backgroundColor: 'rgba(255, 255, 255, 1)',
             fontSize: 20,
             height
         }

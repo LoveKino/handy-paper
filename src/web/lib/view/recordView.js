@@ -30,7 +30,8 @@ module.exports = view(({
     }, (bindValue) => [
         n('div', {
             style: {
-                cursor: 'pointer'
+                cursor: 'pointer',
+                position: 'relative'
             },
 
             onclick: (e) => {

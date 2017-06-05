@@ -33,7 +33,7 @@ module.exports = view(({
         value,
 
         style: {
-            backgroundColor: 'rgba(255, 255, 255, 0)',
+            backgroundColor: 'rgba(255, 255, 255, 1)',
             fontSize: 20,
             height
         }
